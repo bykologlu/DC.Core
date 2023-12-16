@@ -10,33 +10,32 @@ namespace DC.Core.Data.Context
 {
     public abstract class BaseDbContext : DbContext
     {
-        protected IConfiguration Configuration { get; set; }
+        protected IConfiguration Configuration { get; private set; }
         private readonly ILogger<BaseDbContext> _logger;
 
-        private readonly List<Action<ModelBuilder>> _modelCreatingActions = new List<Action<ModelBuilder>>();
+        private readonly List<Action<ModelBuilder>> _modelCreatingActions;
 
-        public BaseDbContext(DbContextOptions dbContextOptions, IConfiguration configuration, params Action<ModelBuilder>[] modelCreatingActions) : base(dbContextOptions)
+        public BaseDbContext(DbContextOptions dbContextOptions,
+            IConfiguration configuration = null,
+            ILogger<BaseDbContext> logger = null,
+            params Action<ModelBuilder>[] modelCreatingActions) : base(dbContextOptions)
         {
-            if (modelCreatingActions != null) _modelCreatingActions = modelCreatingActions.ToList();
+            _modelCreatingActions = modelCreatingActions?.ToList() ?? new List<Action<ModelBuilder>>();
 
             Configuration = configuration;
-        }
-
-        public BaseDbContext(DbContextOptions dbContextOptions, IConfiguration configuration, ILogger<BaseDbContext> logger) : this(dbContextOptions,configuration)
-        {
             _logger = logger;
         }
 
         public void AddModelCreatingAction(Action<ModelBuilder> action)
         {
-            _modelCreatingActions.Add(action);
+            _modelCreatingActions.Add(action ?? throw new ArgumentNullException(nameof(action)));
         }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             foreach (var action in _modelCreatingActions)
             {
-                action(modelBuilder);
+                action?.Invoke(modelBuilder);
             }
 
             base.OnModelCreating(modelBuilder);
