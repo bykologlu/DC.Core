@@ -7,9 +7,11 @@
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <Company>DevCode</Company>
     <RepositoryUrl>https://github.com/bykologlu/DC.Core</RepositoryUrl>
-    <Version>1.0.28</Version>
-    <AssemblyVersion>1.0.28</AssemblyVersion>
-    <FileVersion>1.0.28</FileVersion>
+    <PackageProjectUrl>https://github.com/DevCodeLtd/DC.TenantService</PackageProjectUrl>
+    <RepositoryType>git</RepositoryType>
+    <Version>1.0.30</Version>
+    <AssemblyVersion>1.0.30</AssemblyVersion>
+    <FileVersion>1.0.30</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>

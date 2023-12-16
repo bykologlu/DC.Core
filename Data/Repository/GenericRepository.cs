@@ -5,6 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Query;
 using Microsoft.EntityFrameworkCore.Storage;
 using System.Linq.Expressions;
+using DC.Core.Data.Context;
 
 namespace DC.Core.Data.Repository
 {
@@ -118,7 +119,7 @@ namespace DC.Core.Data.Repository
             await strategy.ExecuteAsync(operation);
         }
 
-        public TContext GetContext<TContext>() where TContext : DbContext
+        public TContext GetContext<TContext>() where TContext : BaseDbContext
         {
             return (TContext)Context;
         }
