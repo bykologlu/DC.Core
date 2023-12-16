@@ -25,7 +25,7 @@ namespace DC.Core.Data.Repository
                                           int index = 0, int size = 10, bool enableTracking = true,
                                           CancellationToken cancellationToken = default);
 
-        IQueryable<T> GetQuery(Expression<Func<T, bool>> predicate);
+        IQueryable<T> GetQuery(Expression<Func<T, bool>> predicate = null);
 
         Task Add(T entity);
 

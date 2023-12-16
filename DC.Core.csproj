@@ -9,9 +9,9 @@
     <RepositoryUrl>https://github.com/bykologlu/DC.Core</RepositoryUrl>
     <PackageProjectUrl>https://github.com/DevCodeLtd/DC.TenantService</PackageProjectUrl>
     <RepositoryType>git</RepositoryType>
-    <Version>1.0.30</Version>
-    <AssemblyVersion>1.0.30</AssemblyVersion>
-    <FileVersion>1.0.30</FileVersion>
+    <Version>1.0.32</Version>
+    <AssemblyVersion>1.0.32</AssemblyVersion>
+    <FileVersion>1.0.32</FileVersion>
   </PropertyGroup>
 
   <ItemGroup>
