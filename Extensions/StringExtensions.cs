@@ -1,4 +1,6 @@
-﻿using System.Security.Cryptography;
+﻿using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using System.Security.Cryptography;
 using System.Text;
 namespace DC.Core.Extensions
 {
@@ -19,6 +21,25 @@ namespace DC.Core.Extensions
 
                 return sb.ToString();
             }
+        }
+
+        public static bool IsJsonString(this string value)
+        {
+            value = value.Trim();
+            if ((value.StartsWith("{") && value.EndsWith("}")) ||
+                (value.StartsWith("[") && value.EndsWith("]")))   
+            {
+                try
+                {
+                    var obj = JToken.Parse(value);
+                    return true;
+                }
+                catch (JsonReaderException)
+                {
+                    return false;
+                }
+            }
+            return false;
         }
     }
 }
