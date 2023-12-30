@@ -1,6 +1,9 @@
-﻿using Newtonsoft.Json;
+﻿using Microsoft.Extensions.Primitives;
+using Newtonsoft.Json;
 using StackExchange.Redis;
 using System.Net;
+using DC.Core.Extensions;
+using System;
 
 namespace DC.Core.Utils.Cache.Redis
 {
@@ -48,17 +51,36 @@ namespace DC.Core.Utils.Cache.Redis
 
             if (!value.IsNull)
             {
-                return JsonConvert.DeserializeObject<T>(value);
+                Type tType = typeof(T);
+
+                try
+                {
+                    return JsonConvert.DeserializeObject<T>(value);
+                }
+                catch (JsonReaderException)
+                {
+                    return (T)Convert.ChangeType(value, tType);
+                }
             }
 
             return default(T);
         }
 
-        public async Task<bool> SetValueAsync(string key, string value, int? duration = null)
+        public async Task<bool> SetValueAsync<T>(string key, T value, int? duration = null)
         {
             TimeSpan ExpireTime = TimeSpan.FromHours(duration ?? DEFAULT_MINUTE_DURATION);
 
-            return await _cache.StringSetAsync(key, value, ExpireTime);
+            string stringValue;
+
+            Type tType = typeof(T);
+
+            if (tType == typeof(string) || tType == typeof(int) || tType == typeof(decimal) || tType == typeof(DateTime))
+                stringValue = value.ToString();
+            else
+                stringValue = JsonConvert.SerializeObject(value);
+
+
+            return await _cache.StringSetAsync(key, stringValue, ExpireTime);
         }
 
         public async Task<bool> Lock(string key, string value, int? duration = null)

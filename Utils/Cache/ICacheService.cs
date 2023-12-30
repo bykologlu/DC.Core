@@ -3,7 +3,7 @@
     public interface ICacheService
     {
         Task<T> GetValueAsync<T>(string key);
-        Task<bool> SetValueAsync(string key, string value, int? duration = null);
+        Task<bool> SetValueAsync<T>(string key, T value, int? duration = null);
         Task<T> GetOrAddAsync<T>(string key, Func<T> action) where T : class;
         Task ClearAsync(string key);
         Task ClearAllASync();
