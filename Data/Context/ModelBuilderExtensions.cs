@@ -1,6 +1,8 @@
 ﻿using DC.Core.Entities.Base;
 using Microsoft.EntityFrameworkCore;
+using System.Linq;
 using System.Linq.Expressions;
+using Microsoft.EntityFrameworkCore.Query;
 
 namespace DC.Core.Data.Context
 {
@@ -18,11 +20,11 @@ namespace DC.Core.Data.Context
             {
                 if (typeof(T).IsAssignableFrom(entityType.ClrType))
                 {
-                    ParameterExpression? parameter = Expression.Parameter(entityType.ClrType);
-                    InvocationExpression? access = Expression.Invoke(filter, parameter);
-                    LambdaExpression? lambda = Expression.Lambda(access, parameter);
+                    var newParam = Expression.Parameter(entityType.ClrType);
+                    var newBody = ReplacingExpressionVisitor.Replace(filter.Parameters.Single(), newParam, filter.Body);
+                    var newLambda = Expression.Lambda(newBody, newParam);
 
-                    entityType.SetQueryFilter(lambda);
+                    entityType.SetQueryFilter(newLambda);
                 }
             }
         }
